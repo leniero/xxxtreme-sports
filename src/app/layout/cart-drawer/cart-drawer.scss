@@ -1,0 +1,80 @@
+:host { position: fixed; inset: 0; z-index: 100; pointer-events: none; }
+:host(.open) { pointer-events: auto; }
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  background: rgb(11 11 12 / 0.4);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+:host(.open) .scrim { opacity: 1; }
+
+.drawer {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  bottom: 8px;
+  width: min(440px, calc(100vw - 16px));
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  transform: translateX(110%) rotate(4deg);
+  transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.2, 1);
+  font: 500 13px var(--font-ui);
+}
+:host(.open) .drawer { transform: none; }
+
+header, footer { padding: 16px; }
+header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--ink); }
+h2 { margin: 0; font: 800 28px var(--font-display); letter-spacing: -0.04em; }
+.x { border: 0; background: none; font-size: 18px; cursor: pointer; color: var(--ink); }
+
+ul { flex: 1; overflow-y: auto; list-style: none; margin: 0; padding: 0 16px; }
+li {
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px dashed rgb(11 11 12 / 0.3);
+
+  img { width: 72px; height: 72px; object-fit: contain; }
+  a { color: inherit; font-weight: 700; text-decoration: none; display: block; }
+  small { display: block; opacity: 0.6; }
+}
+
+.qty {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+
+  button { width: 26px; height: 26px; border: 1px solid var(--ink); background: none; border-radius: 50%; cursor: pointer; color: var(--ink); }
+}
+
+footer {
+  display: grid;
+  gap: 10px;
+  border-top: 1px solid var(--ink);
+  p { display: flex; justify-content: space-between; margin: 0; }
+  small { opacity: 0.6; text-align: center; }
+}
+
+.checkout {
+  padding: 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--acid);
+  font: 800 14px var(--font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  &:disabled { opacity: 0.5; }
+}
+
+.err { color: var(--hot); }
+.empty { padding: 32px 16px; }

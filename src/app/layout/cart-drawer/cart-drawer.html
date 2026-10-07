@@ -1,0 +1,43 @@
+<div class="scrim" (click)="cart.close()"></div>
+
+<aside class="drawer" role="dialog" aria-label="Bag" [attr.aria-hidden]="!cart.isOpen()" [attr.inert]="cart.isOpen() ? null : ''">
+  <header>
+    <h2>Bag ({{ cart.count() }})</h2>
+    <button type="button" class="x" (click)="cart.close()" aria-label="Close bag">✕</button>
+  </header>
+
+  @if (cart.cart()?.lines?.length) {
+    <ul>
+      @for (line of cart.cart()!.lines; track line.id) {
+        <li>
+          @if (line.merchandise.image; as img) {
+            <img [src]="img.url" [alt]="line.merchandise.product.title" />
+          }
+          <div>
+            <a [routerLink]="['/p', line.merchandise.product.handle]" (click)="cart.close()">
+              {{ line.merchandise.product.title }}
+            </a>
+            <small>{{ line.merchandise.title }}</small>
+            <div class="qty">
+              <button type="button" (click)="cart.setQuantity(line.id, line.quantity - 1)" aria-label="Decrease">−</button>
+              <span>{{ line.quantity }}</span>
+              <button type="button" (click)="cart.setQuantity(line.id, line.quantity + 1)" aria-label="Increase">+</button>
+            </div>
+          </div>
+          <span class="price">{{ line.cost | money }}</span>
+        </li>
+      }
+    </ul>
+
+    <footer>
+      <p><span>Subtotal</span><b>{{ cart.cart()!.subtotal | money }}</b></p>
+      @if (cart.error()) {
+        <p class="err">{{ cart.error() }}</p>
+      }
+      <button type="button" class="checkout" [disabled]="cart.busy()" (click)="cart.checkout()">Checkout</button>
+      <small>Shipping & taxes calculated at checkout.</small>
+    </footer>
+  } @else {
+    <p class="empty">Your bag is empty. Go catch something.</p>
+  }
+</aside>

@@ -1,0 +1,23 @@
+@for (p of products(); track p.id; let i = $index) {
+  <a
+    #item
+    class="item"
+    [attr.href]="'/p/' + p.handle"
+    [attr.aria-label]="p.title + ', ' + (p.priceRange.min | money)"
+    draggable="false"
+    [style.--k]="p.motion?.scale ?? 1"
+    [style.mix-blend-mode]="p.motion?.blend ?? null"
+    (pointerdown)="dragStart($event, i)"
+    (click)="open($event, p, i)"
+    (pointerenter)="setHover(i, true)"
+    (pointerleave)="setHover(i, false)"
+    (focus)="setHover(i, true)"
+    (blur)="setHover(i, false)"
+  >
+    <img [src]="(p.cutout ?? p.featuredImage)?.url" alt="" draggable="false" decoding="async" />
+    <span class="tag" aria-hidden="true">
+      <b>{{ p.title }}</b>
+      <span>{{ p.priceRange.min | money }}</span>
+    </span>
+  </a>
+}

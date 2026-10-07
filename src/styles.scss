@@ -1,0 +1,69 @@
+/* ─── Tokens — swap for the brand's palette + type ─────────────────── */
+:root {
+  --ink: #0b0b0c;
+  --paper: #e9e6df;
+  --acid: #d4ff3a;
+  --hot: #ff2e88;
+  --chrome: #c9ccd1;
+  --font-display: 'Syne', 'Arial Black', sans-serif;
+  --font-ui: 'JetBrains Mono', ui-monospace, monospace;
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { margin: 0; }
+
+body {
+  min-height: 100svh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* film grain over everything — sells the "printed collage" feel */
+body::after {
+  content: '';
+  position: fixed;
+  inset: -50%;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 0.6s steps(4) infinite;
+}
+
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-3%, 2%); }
+  50% { transform: translate(2%, -3%); }
+  75% { transform: translate(-1%, 3%); }
+}
+
+::selection { background: var(--acid); color: var(--ink); }
+
+/* ─── View transitions ─────────────────────────────────────────────── */
+::view-transition-group(product-hero) {
+  animation-duration: 0.7s;
+  animation-timing-function: cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+::view-transition-old(root) {
+  animation: 0.45s cubic-bezier(0.7, 0, 0.3, 1) both vt-out;
+}
+
+::view-transition-new(root) {
+  animation: 0.45s cubic-bezier(0.7, 0, 0.3, 1) both vt-in;
+}
+
+@keyframes vt-out { to { opacity: 0; filter: blur(12px); transform: scale(0.96); } }
+@keyframes vt-in { from { opacity: 0; filter: blur(12px); transform: scale(1.04); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after, ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) {
+    animation: none !important;
+    transition: none !important;
+  }
+}

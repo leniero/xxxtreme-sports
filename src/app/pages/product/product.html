@@ -1,0 +1,50 @@
+@if (product.value(); as p) {
+  <article class="pdp">
+    <figure class="hero">
+      @if (hero(); as img) {
+        <img [src]="img.url" [alt]="img.altText ?? p.title" />
+      }
+    </figure>
+
+    <div class="info">
+      <a routerLink="/" class="back">← back to the swarm</a>
+      <h1>{{ p.title }}</h1>
+      <p class="price">{{ (variant()?.price ?? p.priceRange.min) | money }}</p>
+
+      @for (opt of p.options; track opt.name) {
+        @if (opt.values.length > 1) {
+          <fieldset>
+            <legend>{{ opt.name }}</legend>
+            @for (val of opt.values; track val) {
+              <button
+                type="button"
+                class="pill"
+                [class.on]="selection()[opt.name] === val"
+                [attr.aria-pressed]="selection()[opt.name] === val"
+                (click)="select(opt.name, val)"
+              >
+                {{ val }}
+              </button>
+            }
+          </fieldset>
+        }
+      }
+
+      <button
+        type="button"
+        class="add"
+        appMagnetic="0.3"
+        [disabled]="!variant()?.availableForSale || cart.busy()"
+        (click)="addToBag()"
+      >
+        {{ variant()?.availableForSale ? (cart.busy() ? 'adding…' : 'add to bag') : 'sold out' }}
+      </button>
+
+      <div class="desc" [innerHTML]="p.descriptionHtml"></div>
+    </div>
+  </article>
+} @else if (product.isLoading()) {
+  <p class="status">loading…</p>
+} @else {
+  <p class="status">Not found. <a routerLink="/">Back to the swarm</a></p>
+}
